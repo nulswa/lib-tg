@@ -5,7 +5,7 @@
 > In your bot, reference it as a local dependency:
 
 ```json
-"@fargs/tg": "git+https://github.com/nulswa/fargs-tg.git"
+"@fargs/tg": "git+https://github.com/nulswa/lib-tg.git"
 ```
 
 - `bold/italic/underline/strike/spoiler/code/pre/link` » HTML formatting, already escaped
