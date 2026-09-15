@@ -1,0 +1,8 @@
+{
+  "name": "@fargs/tg",
+  "version": "^1.0.0-rc.1",
+  "type": "module",
+  "main": "index.js",
+  "description": ":)",
+  "license": "MIT"
+}
