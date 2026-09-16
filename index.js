@@ -7,7 +7,9 @@ function escapeHtml(text) {
 		.replace(/&/g, "&amp;")
 		.replace(/</g, "&lt;")
 		.replace(/>/g, "&gt;")
-    }
+}
+
+export { escapeHtml }
 
 function escapeAttr(text) {
 	return escapeHtml(text).replace(/"/g, "&quot;")
@@ -83,7 +85,7 @@ export function mask(text) {
 	const hasAt = str.startsWith("@")
 	const body = hasAt ? str.slice(1) : str
 
-	if (body.length <= 6) return str
+	if (body.length <= 6) return str 
 
 	return (hasAt ? "@" : "") + body.slice(0, 3) + "×××××" + body.slice(-3)
 }
@@ -117,7 +119,7 @@ export async function sendMedia(ctx, source, options = {}) {
 
 		const downloadPath = path.join(tempDir, `dl_${Date.now()}`)
 		const res = await fetch(source)
-		if (!res.ok) throw new Error(`sendMedia: no se pudo descargar (${res.status})`)
+		if (!res.ok) throw new Error(`sendMedia: ${res.status}`)
 		const buf = Buffer.from(await res.arrayBuffer())
 		fs.writeFileSync(downloadPath, buf)
 
@@ -126,13 +128,13 @@ export async function sendMedia(ctx, source, options = {}) {
 		await new Promise((resolve, reject) => {
 			const proc = spawn("ffmpeg", ["-y", "-i", downloadPath, ...(convert.args || []), outputPath])
 			if (track) track(proc)
-			proc.on("close", code => code === 0 ? resolve() : reject(new Error(`${code}`)))
+			proc.on("close", code => code === 0 ? resolve() : reject(new Error(`[ffmpeg:error] : ${code}`)))
 			proc.on("error", reject)
 		})
 
 		payload = { source: outputPath }
 	} else {
-		throw new Error("sendMedia: invalid source.")
+		throw new Error("sendMedia: invalid source")
 	}
 
 	const extra = caption ? { caption, parse_mode: "HTML" } : {}
@@ -146,8 +148,8 @@ export async function sendMedia(ctx, source, options = {}) {
 }
 
 export const utils = {
- bold, italic, underline, strike, spoiler, code, pre, link,
- formatSize, onTime, mask, formatError, isBuffer, isDirectUrl, sendMedia
+bold, italic, underline, strike, spoiler, code, pre, link, escapeHtml, formatSize, onTime,
+mask, formatError, isBuffer, isDirectUrl, sendMedia
 }
 
 export default utils
